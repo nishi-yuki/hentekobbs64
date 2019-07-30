@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 from bottle import route, run, template, redirect, request
+import json
 
 # @route("/hello/<name>")
 # def hello(name):
@@ -13,28 +14,19 @@ def comments_html_gen():
 
 @route("/")
 def index():
-    return template("board.html", comments=comments)
+    # return template("board.html", comments=comments)
+    return template("board.html")
 
 @route("/postcomment", method="POST")
 def ajax_sended():
     t = request.forms.getunicode("t")
     comments.append(t)
-    return comments_html_gen()
+    return "success"
 
-# @route("/return", method="POST")
-# def returnt():
-#     t = request.forms.getunicode("t")
-#     print(type(t))
-    
-#     "安全"
-#     return template('あなたが送った文章は "{{t}}" です．', t=t)
 
-#     "危険! XSSされるよ"
-#     # return f"""<!DOCTYPE html>
-#     #     <body>
-#     #     あなたが送った文章は {t} です
-#     #     </body>
-#     # </html>"""
+@route("/getcomments", method="GET")
+def returnt():
+    return json.dumps(comments)
 
 
 run(host="localhost", port=8080)

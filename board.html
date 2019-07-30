@@ -17,10 +17,11 @@
                 return
             }
             xmlHttp.onreadystatechange = function (e) {
-                var commentarea = document.getElementById("commentsarea");
-                // commentarea.textContent = xmlHttp.responseText; // 安全
-                commentarea.innerHTML = xmlHttp.responseText; //危険! XSSされるよ
-                console.log("rev")
+                if (xmlHttp.responseText == "success") {
+                    console.log("GET COMMENT OK")
+                } else {
+                    console.log("GET COMMENT ERROR!")
+                }
             }
             // xmlHttp.open("GET", "/gettext?t=" + inputtext.value, true);
             // xmlHttp.send(null);
@@ -28,7 +29,45 @@
             xmlHttp.send("t=" + encodeURIComponent(inputtext.value));
             console.log("send1")
             inputtext.value = "";
+            getComments();
         }
+
+        function getComments(e) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function (e) {
+                if (!xmlHttp.responseText) { return; }
+                console.log(xmlHttp.responseText);
+                var cms = JSON.parse(xmlHttp.responseText);
+                genCommentsDom(cms);
+            }
+            xmlHttp.open("GET", "/getcomments", true);
+            xmlHttp.send(null)
+        }
+
+        function genCommentsDom(comments) {
+            var commentarea = document.getElementById("commentsarea");
+            while (commentarea.lastChild) {
+                commentarea.removeChild(commentarea.lastChild);
+            }
+            var innerDiv = document.createElement("div");
+            comments.forEach(function (item, index, array) {
+                console.log(index, item);
+                var p = document.createElement("p");
+                p.textContent = item;
+                innerDiv.appendChild(p);
+            });
+            commentarea.appendChild(innerDiv);
+        }
+
+        window.onload = function (e) {
+            (function polling() {
+                if (!document.hidden) {
+                    getComments();
+                }
+                window.setTimeout(polling, 1000)
+            })();
+            console.log("load ok")
+        };
     </script>
 
     <style type="text/css">
@@ -74,10 +113,6 @@
                 </div>
             </form>
             <div id="commentsarea">
-                % for item in comments:
-                <br>
-                {{item}}
-                % end
             </div>
         </div>
         <div class="pure-u-1-4"></div>
