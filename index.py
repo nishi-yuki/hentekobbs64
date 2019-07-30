@@ -9,13 +9,12 @@ import json
 
 comments = []
 
-def comments_html_gen():
-    return "<br>".join(comments)
 
 @route("/")
 def index():
     # return template("board.html", comments=comments)
     return template("board.html")
+
 
 @route("/postcomment", method="POST")
 def ajax_sended():
