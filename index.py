@@ -1,13 +1,18 @@
 #! /usr/bin/env python3
 
-from bottle import route, run, template, redirect, request
+from bottle import route, run, template, redirect, request, response
 import json
+import time
+
+import randkanjiname
 
 # @route("/hello/<name>")
 # def hello(name):
 #     return template("<b>Hello {{name}}</b>!", name=name)
 
 comments = []
+users = {}
+preuse_names = randkanjiname.make_namelist()
 
 
 @route("/")
@@ -19,7 +24,17 @@ def index():
 @route("/postcomment", method="POST")
 def ajax_sended():
     t = request.forms.getunicode("t")
-    comments.append(t)
+    if not t:
+        return
+    userid = request.get_cookie("id")
+    print(userid)
+    if (not userid) or (userid not in users):
+        print("[INFO] New user")
+        userid = str(time.time())
+        response.set_cookie("id", userid)
+        users[userid] = {"name": preuse_names.pop()}
+
+    comments.append("[{}]: {}".format(users[userid]['name'], t))
     return "success"
 
 
