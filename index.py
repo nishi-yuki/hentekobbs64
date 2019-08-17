@@ -3,6 +3,7 @@
 from bottle import route, run, template, redirect, request, response
 import json
 import time
+import sys
 
 import randkanjiname
 
@@ -42,5 +43,6 @@ def ajax_sended():
 def returnt():
     return json.dumps(comments)
 
-
-run(host="localhost", port=8080)
+if __name__ == "__main__":
+    hostname = sys.argv[1] if len(sys.argv) > 1 else "localhost"
+    run(host=hostname, port=8080)
