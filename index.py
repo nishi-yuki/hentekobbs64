@@ -22,9 +22,10 @@ def index():
     return template("board.html")
 
 
-@route("/postcomment", method="POST")
+@route("/score", method="POST")
 def ajax_sended():
     t = request.forms.getunicode("t")
+    name = request.forms.getunicode("name")
     if not t:
         return
     userid = request.get_cookie("id")
@@ -33,7 +34,7 @@ def ajax_sended():
         print("[INFO] New user")
         userid = str(time.time())
         response.set_cookie("id", userid)
-        users[userid] = {"name": preuse_names.pop()}
+        users[userid] = {"name": name}
 
     comments.append("[{}]: {}".format(users[userid]['name'], t))
     return "success"

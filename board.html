@@ -98,20 +98,20 @@
 
 <body>
     <div class="header pure-menu pure-menu-horizontal">
-        <h1>XSS脆弱性</h1>
+        <h1>スコアボード</h1>
     </div>
     <div class="pure-g">
         <div class="pure-u-1-4"></div>
         <div class="pure-u-1-2 mainui">
-            <form class="pure-form" id="send-comment" onsubmit="submitHandler(); return false">
-                <input type="text" name="t" id="inputtext">
-                <br>
-                <div>
-                    <!-- <input class="pure-button pure-button-primary mybutton" type="submit" value="POSTでおくるっ"> -->
-                    <input class="pure-button pure-button-primary mybutton" type="button" value="ajaxでおくるっ"
-                        onclick="submitHandler()">
-                </div>
-            </form>
+<!--            <form class="pure-form" id="send-comment" onsubmit="submitHandler(); return false">-->
+<!--                <input type="text" name="t" id="inputtext">-->
+<!--                <br>-->
+<!--                <div>-->
+<!--                    &lt;!&ndash; <input class="pure-button pure-button-primary mybutton" type="submit" value="POSTでおくるっ"> &ndash;&gt;-->
+<!--                    <input class="pure-button pure-button-primary mybutton" type="button" value="ajaxでおくるっ"-->
+<!--                        onclick="submitHandler()">-->
+<!--                </div>-->
+<!--            </form>-->
             <div id="commentsarea">
             </div>
         </div>
