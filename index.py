@@ -22,7 +22,7 @@ def index():
     return template("board.html")
 
 
-@route("/postcomment", method="POST")
+@route("/comments", method="POST")
 def ajax_sended():
     t = request.forms.getunicode("t")
     if not t:
@@ -39,7 +39,7 @@ def ajax_sended():
     return "success"
 
 
-@route("/getcomments", method="GET")
+@route("/comments", method="GET")
 def returnt():
     return json.dumps(comments)
 

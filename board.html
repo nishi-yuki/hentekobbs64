@@ -25,7 +25,7 @@
             }
             // xmlHttp.open("GET", "/gettext?t=" + inputtext.value, true);
             // xmlHttp.send(null);
-            xmlHttp.open("POST", "/postcomment", true);
+            xmlHttp.open("POST", "/comments", true);
             xmlHttp.send("t=" + encodeURIComponent(inputtext.value));
             console.log("send1")
             inputtext.value = "";
@@ -40,7 +40,7 @@
                 var cms = JSON.parse(xmlHttp.responseText);
                 genCommentsDom(cms);
             }
-            xmlHttp.open("GET", "/getcomments", true);
+            xmlHttp.open("GET", "/comments", true);
             xmlHttp.send(null)
         }
 
