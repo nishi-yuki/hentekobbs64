@@ -5,15 +5,11 @@ import json
 import time
 import sys
 
-import randkanjiname
+import dbclient
 
 # @route("/hello/<name>")
 # def hello(name):
 #     return template("<b>Hello {{name}}</b>!", name=name)
-
-comments = []
-users = {}
-preuse_names = randkanjiname.make_namelist()
 
 
 @route("/")
@@ -28,21 +24,20 @@ def ajax_sended():
     if not t:
         return
     userid = request.get_cookie("id")
-    print(userid)
-    if (not userid) or (userid not in users):
-        print("[INFO] New user")
-        userid = str(time.time())
-        response.set_cookie("id", userid)
-        users[userid] = {"name": preuse_names.pop()}
-
-    comments.append("[{}]: {}".format(users[userid]['name'], t))
+    print('userid:', userid)
+    userid = dbclient.save_comment(userid, t)
+    response.set_cookie("id", str(userid))
     return "success"
 
 
 @route("/comments", method="GET")
 def returnt():
+    result = dbclient.get_comments()
+    comments = ['[{}]: {}'.format(i[0], i[1]) for i in result]
     return json.dumps(comments)
+
 
 if __name__ == "__main__":
     hostname = sys.argv[1] if len(sys.argv) > 1 else "localhost"
+    dbclient.init_tables()
     run(host=hostname, port=8080)

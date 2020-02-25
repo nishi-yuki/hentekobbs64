@@ -1,3 +1,13 @@
+"""
+メモ
+はじめにinit_tables()を呼び出してテーブルを初期化する。これを実行すると書き込みの内容、
+及びユーザー情報が消去され、ユーザー名のシャッフルが行われる。
+
+新規ユーザーをcreate_new_user()で作成する。返り値で一意な user id が返る。
+
+コメントはsave_comment(uid, comment)で保存する。
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy import MetaData, Table, Column, String, Integer, BigInteger, DateTime
@@ -48,23 +58,25 @@ def init_users_table():
     conn.execute(query, values)
 
 
-class UserNotFoundError(Exception):
-    pass
-
 def save_comment(uid, comment):
-    if type(uid) is not int:
-        raise UserNotFoundError('Uid\'s type is not int.')
-    user = get_user_by_uid(uid)
+    try:
+        uid = int(uid)
+    except:
+        user = None
+    else:
+        user = get_user_by_uid(uid)
+        print('user existance check:', user)
     if not user:
-        raise UserNotFoundError('User does not exists.')
+        uid = create_new_user()
     query = bbs.insert().values(uid=uid, date=datetime.now(), comment=comment)
     conn.execute(query)
-    return
+    return uid
 
 
 def get_comments():
-    query = select([users.c.name, bbs.c.comment, bbs.c.date]
-                   ).where(bbs.c.uid == users.c.uid)
+    query = select([users.c.name, bbs.c.comment, bbs.c.date]) \
+        .where(bbs.c.uid == users.c.uid) \
+        .order_by(bbs.c.id)
     result = conn.execute(query)
     return result
 
