@@ -10,6 +10,8 @@ import dbclient
 # @route("/hello/<name>")
 # def hello(name):
 #     return template("<b>Hello {{name}}</b>!", name=name)
+MAX_COMMENT_LENGTH = 256
+TOO_LONG_MSG = '(長いのでカットしました)'
 
 
 @route("/")
@@ -21,15 +23,18 @@ def index():
 @route("/comments", method="POST")
 def ajax_sended():
     t = request.forms.getunicode("t")
-    if not t:
+    comment = t[:MAX_COMMENT_LENGTH]
+    if len(t) > MAX_COMMENT_LENGTH:
+        comment += TOO_LONG_MSG
+    if not comment:
         return
     userid = request.get_cookie("id")
     print('userid:', userid)
     try:
-        userid = dbclient.save_comment(userid, t)
+        userid = dbclient.save_comment(userid, comment)
     except dbclient.UsersTableAlreadyFull:
         dbclient.init_tables()
-        userid = dbclient.save_comment(userid, t)
+        userid = dbclient.save_comment(userid, comment)
     response.set_cookie("id", str(userid))
     return "success\n"
 
