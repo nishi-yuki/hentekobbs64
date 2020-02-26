@@ -31,7 +31,7 @@ def ajax_sended():
         dbclient.init_tables()
         userid = dbclient.save_comment(userid, t)
     response.set_cookie("id", str(userid))
-    return "success"
+    return "success\n"
 
 
 @route("/comments", method="GET")
