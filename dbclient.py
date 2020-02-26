@@ -107,3 +107,15 @@ def create_new_user():
     conn.execute(query)
 
     return uid
+
+
+def get_user_count():
+    query = select([users.c.id]) \
+        .where(users.c.uid != None) \
+        .order_by(desc(users.c.id)) \
+        .limit(1)
+    result = conn.execute(query).fetchone()
+    if result:
+        return result[users.c.id]
+    else:
+        return 0
