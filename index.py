@@ -37,7 +37,7 @@ def ajax_sended():
 @route("/comments", method="GET")
 def returnt():
     result = dbclient.get_comments()
-    comments = ['[{}]: {}'.format(i[0], i[1]) for i in result]
+    comments = ['[{}]: {}'.format(i['name'], i['comment']) for i in result]
     return json.dumps(comments)
 
 

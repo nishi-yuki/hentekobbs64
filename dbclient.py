@@ -18,6 +18,7 @@ import time
 import randkanjiname
 
 metadata = MetaData()
+_changed = True
 
 bbs = Table(
     'bbs', metadata,
@@ -50,8 +51,10 @@ def init_tables():
 
 
 def init_bbs_table():
+    global _changed
     bbs.drop(engine, checkfirst=True)
     bbs.create(engine)
+    _changed = True
 
 
 def init_users_table():
@@ -63,6 +66,7 @@ def init_users_table():
 
 
 def save_comment(uid, comment):
+    global _changed
     try:
         uid = int(uid)
     except:
@@ -74,15 +78,31 @@ def save_comment(uid, comment):
         uid = create_new_user()
     query = bbs.insert().values(uid=uid, date=datetime.now(), comment=comment)
     conn.execute(query)
+    _changed = True
     return uid
 
 
+comments_memo = None
+
+
 def get_comments():
+    global comments_memo
+    global _changed
+    # print('comments memo:', list(comments_memo if comments_memo else ['emp']))
+    # print('changed:', _changed, type(comments_memo))
+    if comments_memo is not None and not _changed:
+        return comments_memo
     query = select([users.c.name, bbs.c.comment, bbs.c.date]) \
         .where(bbs.c.uid == users.c.uid) \
         .order_by(bbs.c.id)
     result = conn.execute(query)
-    return result
+    comments_memo = [
+        {
+            'name': row[0], 'comment':row[1], 'date':row[2]
+        }
+        for row in result]
+    _changed = False
+    return comments_memo
 
 
 def get_user_by_uid(uid):
