@@ -40,6 +40,10 @@ conn = engine.connect()
 metadata.create_all(engine)
 
 
+class UsersTableAlreadyFull(Exception):
+    pass
+
+
 def init_tables():
     init_bbs_table()
     init_users_table()
@@ -95,6 +99,8 @@ def create_new_user():
         .order_by(users.c.id) \
         .limit(1)
     result = conn.execute(query).fetchone()
+    if not result:
+        raise UsersTableAlreadyFull
     unused_utbid = result[users.c.id]
 
     # uidを生成

@@ -25,7 +25,11 @@ def ajax_sended():
         return
     userid = request.get_cookie("id")
     print('userid:', userid)
-    userid = dbclient.save_comment(userid, t)
+    try:
+        userid = dbclient.save_comment(userid, t)
+    except dbclient.UsersTableAlreadyFull:
+        dbclient.init_tables()
+        userid = dbclient.save_comment(userid, t)
     response.set_cookie("id", str(userid))
     return "success"
 
@@ -39,5 +43,4 @@ def returnt():
 
 if __name__ == "__main__":
     hostname = sys.argv[1] if len(sys.argv) > 1 else "localhost"
-    dbclient.init_tables()
     run(host=hostname, port=8080)
