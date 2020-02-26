@@ -9,7 +9,7 @@
 """
 
 from sqlalchemy import create_engine
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy import MetaData, Table, Column, String, Integer, BigInteger, DateTime
 from datetime import datetime
 import os
