@@ -36,7 +36,7 @@ users = Table(
 )
 
 
-engine = create_engine(os.getenv("DBURI", "sqlite://"), echo=True)
+engine = create_engine(os.getenv("DATABASE_URL", "sqlite://"), echo=True)
 conn = engine.connect()
 metadata.create_all(engine)
 
