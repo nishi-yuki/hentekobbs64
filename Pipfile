@@ -9,6 +9,7 @@ autopep8 = "*"
 [packages]
 bottle = "*"
 sqlalchemy = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
