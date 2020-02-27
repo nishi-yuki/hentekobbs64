@@ -4,6 +4,7 @@ from bottle import route, run, template, redirect, request, response
 import json
 import time
 import sys
+import os
 
 import dbclient
 
@@ -48,4 +49,9 @@ def returnt():
 
 if __name__ == "__main__":
     hostname = sys.argv[1] if len(sys.argv) > 1 else "localhost"
-    run(host=hostname, port=8080)
+    port = int(os.getenv('PORT', 8080))
+    state = os.getenv('STATE', 'DEV')
+    if state=='PROD':
+        run(server='gunicorn', host='0.0.0.0', port=port)
+    else:
+        run(host=hostname, port=port)
