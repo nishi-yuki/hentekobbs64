@@ -23,7 +23,7 @@ _changed = True
 bbs = Table(
     'bbs', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('uid', Integer),
+    Column('uid', BigInteger),
     Column('date', DateTime),
     Column('comment', String),
 )
