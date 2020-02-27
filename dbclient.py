@@ -52,14 +52,14 @@ def init_tables():
 
 def init_bbs_table():
     global _changed
-    bbs.drop(engine, checkfirst=True)
-    bbs.create(engine)
+    query = bbs.delete()
+    conn.execute(query)
     _changed = True
 
 
 def init_users_table():
-    users.drop(engine, checkfirst=True)
-    users.create(engine)
+    query = users.delete()
+    conn.execute(query)
     values = [{'name': nid} for nid in randkanjiname.get_shuffled_names()]
     query = users.insert()
     conn.execute(query, values)
