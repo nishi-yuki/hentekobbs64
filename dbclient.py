@@ -101,7 +101,7 @@ def get_comments():
             'name': row[0], 'comment':row[1], 'date':row[2]
         }
         for row in result]
-    _changed = False
+    # _changed = False
     return comments_memo
 
 
