@@ -10,6 +10,7 @@ autopep8 = "*"
 bottle = "*"
 sqlalchemy = "*"
 gunicorn = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"
